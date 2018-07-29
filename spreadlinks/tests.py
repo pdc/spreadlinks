@@ -11,7 +11,8 @@ from django.test import TestCase
 import os
 import shutil
 from django.utils import safestring
-from linklibrarylib import *
+from .linklibrarylib import *
+
 
 class SimpleTest(TestCase):
     dir_name = 'test-resources'
@@ -31,8 +32,8 @@ class SimpleTest(TestCase):
 
     def test_library_list_one(self):
         os.mkdir(os.path.join(self.dir_name, 'foo'))
-        with open(os.path.join(self.dir_name, 'foo/METADATA.txt'), 'wt') as output:
-                output.write(b'Title: Fabulous Object Organization\nBoo: Ba\n\nHello, world.\n\nPleased to be here!—')
+        with open(os.path.join(self.dir_name, 'foo/METADATA.txt'), 'w') as output:
+                output.write(u'Title: Fabulous Object Organization\nBoo: Ba\n\nHello, world.\n\nPleased to be here!—')
                 # Dash added to check unicode handling
 
         libs = LibrarySet(self.dir_name)
@@ -161,8 +162,8 @@ class SimpleTest(TestCase):
 
     def test_formatted_properties(self):
         os.mkdir(os.path.join(self.dir_name, 'baz'))
-        with open(os.path.join(self.dir_name, 'baz/data.csv'), 'wt') as output:
-            output.write(b'Title,Description,Keywords,URL\nCrumbs,Crummy,cake,http://example.org/\nSlime,"Slimy\n\n‘Wormy’",goo,http://example.com/')
+        with open(os.path.join(self.dir_name, 'baz/data.csv'), 'w') as output:
+            output.write('Title,Description,Keywords,URL\nCrumbs,Crummy,cake,http://example.org/\nSlime,"Slimy\n\n‘Wormy’",goo,http://example.com/')
 
         libs = LibrarySet(self.dir_name)
         lib = libs['baz']

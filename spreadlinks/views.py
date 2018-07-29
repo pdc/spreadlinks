@@ -1,7 +1,8 @@
+from __future__ import unicode_literals
 from django.http import HttpResponse, Http404
 from django.template import RequestContext
 from django.shortcuts import render
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.cache import cache
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.conf import settings
@@ -63,7 +64,7 @@ def library_detail(request, root_dir, library_name, urlencoded_keywords='', page
         facet_drillupdowns[facet_name] = {'drillups': drillups, 'drilldowns': drilldowns}
 
     facet_drillupdowns = sorted(facet_drillupdowns.items(),
-        key=lambda (facet_name, facet): (facet_name != 'main', facet_name))
+        key=lambda facet_name_facet: (facet_name_facet[0] != 'main', facet_name_facet[0]))
 
     # Now the machinery for paging thbrough long lists of links.
     paginator = Paginator(links, settings.SPREADLINKS_PER_PAGE)

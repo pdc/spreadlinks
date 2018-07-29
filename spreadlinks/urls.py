@@ -1,14 +1,20 @@
 # Map URLs to functions for the spreadlinks module.
 
-from django.conf.urls import url
 from django.conf import settings
+from django.urls import path, re_path, include
+
 import spreadlinks.views
 
+kwargs = {'root_dir': settings.SPREADLINKS_DIR}
+library_detail_paths = [
+    path('', spreadlinks.views.library_detail, kwargs, name='library_detail'),
+    path('page<int:page>', spreadlinks.views.library_detail, kwargs, name='library_detail'),
+]
 
 urlpatterns = [
-    url(r'^$', spreadlinks.views.library_list, {'root_dir': settings.SPREADLINKS_DIR}, 'library_list'),
-    url(r'^(?P<library_name>[^/]*)/$', spreadlinks.views.library_detail, {'root_dir': settings.SPREADLINKS_DIR}, 'library_detail'),
-    url(r'^(?P<library_name>[^/]*)/page(?P<page>[0-9]+)$', spreadlinks.views.library_detail, {'root_dir': settings.SPREADLINKS_DIR}, 'library_detail'),
-    url(r'^(?P<library_name>[^/]*)/tags/(?P<urlencoded_keywords>[a-z_0-9+:-]+)$', spreadlinks.views.library_detail, {'root_dir': settings.SPREADLINKS_DIR}, 'library_detail'),
-    url(r'^(?P<library_name>[^/]*)/tags/(?P<urlencoded_keywords>[a-z_0-9+:-]+)/page(?P<page>[0-9]+)$', spreadlinks.views.library_detail, {'root_dir': settings.SPREADLINKS_DIR}, 'library_detail'),
+    path('', spreadlinks.views.library_list, kwargs, name='library_list'),
+    path('<library_name>/', include([
+        path('', include(library_detail_paths)),
+        re_path(r'^tags/(?P<urlencoded_keywords>[a-z_0-9+:-]+)$', include(library_detail_paths)),
+    ])),
 ]

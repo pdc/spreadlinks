@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from django.db import models
 from django.core.cache import cache
 from django.http import Http404
@@ -16,7 +17,7 @@ def get_library_or_404(root_dir, library_name):
     """Given a parent direcgtory and library name, find the library or throw an HTTP exception."""
     try:
         return get_library_set(root_dir)[library_name]
-    except KeyError, e:
+    except KeyError as e:
         raise Http404()
 
 
