@@ -15,6 +15,6 @@ urlpatterns = [
     path('', spreadlinks.views.library_list, kwargs, name='library_list'),
     path('<library_name>/', include([
         path('', include(library_detail_paths)),
-        re_path(r'^tags/(?P<urlencoded_keywords>[a-z_0-9+:-]+)$', include(library_detail_paths)),
+        re_path(r'^tags/(?P<urlencoded_keywords>[a-z_0-9+:-]+)', include(library_detail_paths)),
     ])),
 ]

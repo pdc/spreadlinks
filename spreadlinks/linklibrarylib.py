@@ -4,7 +4,7 @@
 linklibrarylib.py
 
 Created by Damian Cugley on 2010-01-01.
-Copyright (c) 2010 Damian Cugley. All rights reserved.
+Copyright (c) 2010, 2018 Damian Cugley. All rights reserved.
 """
 from __future__ import print_function, unicode_literals
 from collections import Mapping
@@ -17,6 +17,7 @@ from django.utils.functional import cached_property
 
 
 MAIN = 'main'
+ENCODING = 'UTF-8'
 
 
 formatter = Markdown()
@@ -182,7 +183,7 @@ class Link(object):
             elif key == 'url':
                 key = 'href'
             if isinstance(val, bytes):
-                val = val.decode()
+                val = val.decode(ENCODING)
             setattr(self, key.replace('-', '_'), val)
 
     def __getattr__(self, k):

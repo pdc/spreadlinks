@@ -14,12 +14,16 @@ from spreadlinks.models import *
 def render_with_template(default_template_name, default_base_template_name='spreadlinks/base.html'):
     """Decorator to wrap template-based rendering around a view function returning template variables."""
     def decorator(func):
-        def wrapped_handler(request, template_name=None, base_template_name=None, *args, **kwargs):
+        def wrapped_handler(request, template_name=None, base_template_name=None, style_links=None, style_includes=None, *args, **kwargs):
             result = func(request, *args, **kwargs)
             if isinstance(result, HttpResponse):
                 return result
             if not result.get('base_template_name'):
                 result['base_template_name'] = base_template_name or default_base_template_name
+            if 'style_links' not in result:
+                result['style_links'] = style_links if style_links is not None else ['style/base.css']
+            if 'style_includes' not in result:
+                result['style_includes'] = style_includes if style_links is not None else []
             return render(request, template_name or default_template_name, result)
         return wrapped_handler
     return decorator
