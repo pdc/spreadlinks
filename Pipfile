@@ -4,6 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+spreadlinks = {editable = true,path = "."}
 
 [dev-packages]
 setuptools = "*"
@@ -11,4 +12,4 @@ wheel = "*"
 twine = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.8"

@@ -1,13 +1,11 @@
-#!/usr/bin/env python
-# encoding: utf-8
 """
 linklibrarylib.py
 
 Created by Damian Cugley on 2010-01-01.
-Copyright (c) 2010, 2018 Damian Cugley. All rights reserved.
+Copyright © 2010, 2018, 2020 Damian Cugley. All rights reserved.
 """
 from __future__ import print_function, unicode_literals
-from collections import Mapping
+from collections.abc import Mapping
 import os
 import email  # RFC 2822 parsing
 import csv

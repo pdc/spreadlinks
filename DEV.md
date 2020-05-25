@@ -1,12 +1,26 @@
+Developer notes
+===============
 
+The file `Pipfile` is included as a convenience when developing; the
+dependencies for the app are specified in `setup.py`.
+
+
+Tests
+-----
+
+These are in their own package:
+
+    pipenv run python -m unittest discover
 
 
 Release process
 ----------------
 
+Update CHANGELOG.md
+
 Update `setup.py`:
 
-* Possibly `__version__` minor version
+* Possibly bump `__version__` minor version
 * Remove `.dev` from `setuptools.setup`
 
 Build and publish

@@ -1,20 +1,19 @@
-# Encoding: UTF-8
 """
-This file demonstrates two different styles of tests (one doctest and one
-unittest). These will both pass when you run "manage.py test".
-
-Replace these with more appropriate tests for your application.
+Tests for Spreadlinks.
 """
 
 from __future__ import unicode_literals
-from django.test import TestCase
+from django.test import SimpleTestCase
 import os
 import shutil
+import unittest
 from django.utils import safestring
-from .linklibrarylib import *
+from spreadlinks.linklibrarylib import tagify, LibrarySet
 
 
-class SimpleTest(TestCase):
+class SimpleTest(unittest.TestCase):
+    # We don't use SimpleTestCase directly because it tries to set up databases.
+
     dir_name = 'test-resources'
 
     def setUp(self):
@@ -33,8 +32,8 @@ class SimpleTest(TestCase):
     def test_library_list_one(self):
         os.mkdir(os.path.join(self.dir_name, 'foo'))
         with open(os.path.join(self.dir_name, 'foo/METADATA.txt'), 'w') as output:
-                output.write(u'Title: Fabulous Object Organization\nBoo: Ba\n\nHello, world.\n\nPleased to be here!—')
-                # Dash added to check unicode handling
+            output.write(u'Title: Fabulous Object Organization\nBoo: Ba\n\nHello, world.\n\nPleased to be here!—')
+            # Dash added to check unicode handling
 
         libs = LibrarySet(self.dir_name)
         self.assertEqual(1, len(libs))
@@ -58,7 +57,10 @@ class SimpleTest(TestCase):
     def test_simple_links(self):
         os.mkdir(os.path.join(self.dir_name, 'baz'))
         with open(os.path.join(self.dir_name, 'baz/data.csv'), 'wt') as output:
-            output.write('Title,Description,Keywords,URL\nCrumbs,Crummy,cake,http://example.org/\nSlime,Slimy,goo,http://example.com/')
+            output.write(
+                'Title,Description,Keywords,URL\n'
+                'Crumbs,Crummy,cake,http://example.org/\n'
+                'Slime,Slimy,goo,http://example.com/')
 
         libs = LibrarySet(self.dir_name)
         lib = libs['baz']
@@ -69,7 +71,12 @@ class SimpleTest(TestCase):
     def test_skip_blank_lines(self):
         os.mkdir(os.path.join(self.dir_name, 'baz'))
         with open(os.path.join(self.dir_name, 'baz/data.csv'), 'wt') as output:
-            output.write('Title,Description,Keywords,URL,,,\nCrumbs,Crummy,cake,http://example.org/,,,\nSlime,Slimy,goo,http://example.com/,,,\n,,,,,,,,,\n,,,,,,,,\n')
+            output.write(
+                'Title,Description,Keywords,URL,,,\n'
+                'Crumbs,Crummy,cake,http://example.org/,,,\n'
+                'Slime,Slimy,goo,http://example.com/,,,\n'
+                ',,,,,,,,,\n'
+                ',,,,,,,,\n')
 
         libs = LibrarySet(self.dir_name)
         lib = libs['baz']
@@ -85,7 +92,11 @@ class SimpleTest(TestCase):
     def test_tagging(self):
         os.mkdir(os.path.join(self.dir_name, 'quux'))
         with open(os.path.join(self.dir_name, 'quux/data.csv'), 'wt') as output:
-            output.write('Title,Description,Keywords,URL\nCrumbs,Crummy,cake,http://example.org/\nSlime,Slimy,goo,http://example.com/\nSlimy crumbs,Slimy and crumby,cake goo,http://example.net/')
+            output.write(
+                'Title,Description,Keywords,URL\n'
+                'Crumbs,Crummy,cake,http://example.org/\n'
+                'Slime,Slimy,goo,http://example.com/\n'
+                'Slimy crumbs,Slimy and crumby,cake goo,http://example.net/')
 
         lib = LibrarySet(self.dir_name)['quux']
         self.assertEqual(set(['cake', 'goo']), lib.main_keywords)
@@ -122,10 +133,19 @@ class SimpleTest(TestCase):
     def test_separator(self):
         os.mkdir(os.path.join(self.dir_name, 'quux2'))
         with open(os.path.join(self.dir_name, 'quux2/METADATA.txt'), 'wt') as output:
-            output.write('Title: Quantum Uniform Ungulate Xerography 2\nkeyword-separator: ;\nBoo: Ba\n\nHello, world.\nPleased to be here')
+            output.write(
+                'Title: Quantum Uniform Ungulate Xerography 2\n'
+                'keyword-separator: ;\n'
+                'Boo: Ba\n'
+                '\n'
+                'Hello, world.\n'
+                'Pleased to be here')
 
         with open(os.path.join(self.dir_name, 'quux2/data.csv'), 'wt') as output:
-            output.write('Title,Description,Keywords,URL\nCrumbs,Crummy,cake;socks,http://example.org/\nSlime,Slimy,goo; hose,http://example.com/\nSlimy crumbs,Slimy and crumby, cake; goo ,http://example.net/')
+            output.write(
+                'Title,Description,Keywords,URL\nCrumbs,Crummy,cake;socks,http://example.org/\n'
+                'Slime,Slimy,goo; hose,http://example.com/\n'
+                'Slimy crumbs,Slimy and crumby, cake; goo ,http://example.net/')
 
         lib = LibrarySet(self.dir_name)['quux2']
         self.assertEqual(set(['cake', 'goo', 'hose', 'socks']), lib.main_keywords)
@@ -141,7 +161,10 @@ class SimpleTest(TestCase):
     def test_other_keywords(self):
         os.mkdir(os.path.join(self.dir_name, 'zub'))
         with open(os.path.join(self.dir_name, 'zub/data.csv'), 'wt') as output:
-            output.write('Title,Keywords,Colour keywords,URL\nHarlequin,cat,black white,http://www.flickr.com/photos/jeremy_dennis/4217338130/\nTeasel,cat,black,http://www.flickr.com/photos/jeremy_dennis/3713607489/')
+            output.write(
+                'Title,Keywords,Colour keywords,URL\n'
+                'Harlequin,cat,black white,http://www.flickr.com/photos/jeremy_dennis/4217338130/\n'
+                'Teasel,cat,black,http://www.flickr.com/photos/jeremy_dennis/3713607489/')
 
         lib = LibrarySet(self.dir_name)['zub']
         link = lib.all_links[0]
@@ -156,14 +179,20 @@ class SimpleTest(TestCase):
 
         self.assertEqual('cat+colour:black+colour:white', lib.urlencode_keywords(
             {'colour': ['black', 'white'], 'main': ['cat']}))
-        self.assertEqual({'colour': set(['black', 'white']), 'main': set(['cat'])},
-            lib.urldecode_keywords('cat+colour:black+colour:white'))
-
+        self.assertEqual(
+            {'colour': set(['black', 'white']), 'main': set(['cat'])},
+            lib.urldecode_keywords('cat+colour:black+colour:white'),
+        )
 
     def test_formatted_properties(self):
         os.mkdir(os.path.join(self.dir_name, 'baz'))
         with open(os.path.join(self.dir_name, 'baz/data.csv'), 'w') as output:
-            output.write('Title,Description,Keywords,URL\nCrumbs,Crummy,cake,http://example.org/\nSlime,"Slimy\n\n‘Wormy’",goo,http://example.com/')
+            output.write(
+                'Title,Description,Keywords,URL\n'
+                'Crumbs,Crummy,cake,http://example.org/\n'
+                'Slime,"Slimy\n'
+                '\n'
+                '‘Wormy’",goo,http://example.com/')
 
         libs = LibrarySet(self.dir_name)
         lib = libs['baz']
@@ -171,3 +200,5 @@ class SimpleTest(TestCase):
         self.assertHTMLEqual('<p>Crummy</p>', lib.all_links[0].description_formatted)
         self.assertHTMLEqual('<p>Slimy</p><p>‘Wormy’</p>', lib.all_links[1].description_formatted)
         self.assertTrue(isinstance(lib.all_links[0].description_formatted, safestring.SafeText))
+
+    assertHTMLEqual = SimpleTestCase.assertHTMLEqual

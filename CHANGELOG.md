@@ -1,11 +1,19 @@
 Change log
 ==========
 
+0.4.1
+-----
+
+* Change import for Python 3.9 compatibility
+  (This breaks compatibility with Python ≤ 3.2).
+* Move tests in to their own directory.
+
+
 0.4.0
 ----
 
 * Allow specification of style sheets to include on the pages.
-* Add more CSS class names to the HTML generated for the sake of better theming,
+* Add more CSS class names to the HTML generated for the sake of better theming.
 
 0.3.0
 -----
