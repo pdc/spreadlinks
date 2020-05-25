@@ -2,14 +2,14 @@
 
 import setuptools
 
-__version__ = '0.4.1'
+__version__ = '0.4.2'
 
 with open('README.md', 'r') as input:
     long_description = input.read()
 
 setuptools.setup(
     name='Spreadlinks',
-    version=__version__,
+    version=__version__ + '.dev',
     author='Damian Cugley',
     author_email='pdc@alleged.org.uk',
     description='A Django app for serving libraries of links from spreadsheets.',
