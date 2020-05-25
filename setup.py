@@ -9,7 +9,7 @@ with open('README.md', 'r') as input:
 
 setuptools.setup(
     name='Spreadlinks',
-    version=__version__ + '.dev',
+    version=__version__,
     author='Damian Cugley',
     author_email='pdc@alleged.org.uk',
     description='A Django app for serving libraries of links from spreadsheets.',
