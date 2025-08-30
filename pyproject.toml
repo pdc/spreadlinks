@@ -1,6 +1,6 @@
 [project]
 name = "spreadlinks"
-version = "0.5.0"
+version = "0.5.1"
 description = "Django app for displaying links to resources with simple tags-based filtering"
 authors = [
     {name = "Damian Cugley",email = "pdc@alleged.org.uk"}

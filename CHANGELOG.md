@@ -1,5 +1,7 @@
 # Changelog
 
+## Develop
+
 ## 0.5.0 (2025-08-29)
 
 ### Changed
